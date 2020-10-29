@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.transaction.Transactional;
@@ -31,7 +32,7 @@ public class CreatePropostaController {
         Proposta proposta = req.toModel();
         Optional<Proposta> propostaOptional = propostaRepository.findbyDocument(req.getDocumento());
         if (propostaOptional.isPresent()) {
-            return ResponseEntity.status(422).body("Proposta com o documento "+ req.getDocumento() +" já existe");
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Documento já cadastrado");
         }
         propostaRepository.save(proposta);
         return ResponseEntity.created(builder.path("/api/v1/propostas/{id}").buildAndExpand(proposta.getId()).toUri()).build();
