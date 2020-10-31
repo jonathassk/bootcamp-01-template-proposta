@@ -1,5 +1,6 @@
 package com.zupbootcamp.proposta.models;
 
+import com.zupbootcamp.proposta.feing.responses.ResultadoSolicitacao;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -16,7 +17,7 @@ public class Proposta {
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     @Column(name = "id", updatable = false, nullable = false)
-    private UUID id;
+    private String id;
     private String documento;
     @Email
     @NotBlank
@@ -28,6 +29,7 @@ public class Proposta {
     @NotNull
     @Positive
     private BigDecimal salario;
+    private ResultadoSolicitacao resultadoSolicitacao;
 
     public Proposta(String documento, @Email @NotBlank String email, @NotBlank String nome, @NotBlank String endereco, @NotNull @Positive BigDecimal salario) {
         this.documento = documento;
@@ -41,7 +43,23 @@ public class Proposta {
     public Proposta() {
     }
 
-    public UUID getId() {
+    public String getDocumento() {
+        return documento;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public String getId() {
         return id;
+    }
+
+    public void setResultadoSolicitacao(ResultadoSolicitacao resultadoSolicitacao) {
+        this.resultadoSolicitacao = resultadoSolicitacao;
+    }
+
+    public ResultadoSolicitacao getResultadoSolicitacao() {
+        return resultadoSolicitacao;
     }
 }
