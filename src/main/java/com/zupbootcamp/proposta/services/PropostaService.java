@@ -1,5 +1,6 @@
 package com.zupbootcamp.proposta.services;
 
+import com.zupbootcamp.proposta.controllers.CreateCardController;
 import com.zupbootcamp.proposta.feing.AnaliseClient;
 import com.zupbootcamp.proposta.feing.requests.AnaliseRequest;
 import com.zupbootcamp.proposta.feing.responses.ResultadoSolicitacao;
@@ -13,21 +14,30 @@ import org.springframework.stereotype.Service;
 public class PropostaService {
     private final PropostaRepository propostaRepository;
     private final AnaliseClient analiseClient;
+    private final CreateCardController createCardController;
 
     @Autowired
-    public PropostaService (PropostaRepository propostaRepository, AnaliseClient analiseClient) {
+    public PropostaService (PropostaRepository propostaRepository, AnaliseClient analiseClient, CreateCardController createCardController) {
         this.propostaRepository = propostaRepository;
         this.analiseClient = analiseClient;
+        this.createCardController = createCardController;
     }
 
     public void criarProposta (Proposta proposta) {
+        AnaliseRequest analiseRequest = null;
+        propostaRepository.save(proposta);
         try {
-            AnaliseRequest analiseRequest = new AnaliseRequest(proposta.getDocumento(), proposta.getNome(), proposta.getId());
+            analiseRequest = new AnaliseRequest(proposta.getDocumento(), proposta.getNome(), proposta.getId());
             analiseClient.analiseProposta(analiseRequest);
             proposta.setResultadoSolicitacao(ResultadoSolicitacao.ELEGIVEL);
         } catch (FeignException e) {
             proposta.setResultadoSolicitacao(ResultadoSolicitacao.NAO_ELEGIVEL);
         }
         propostaRepository.save(proposta);
+        if (proposta.getResultadoSolicitacao() == ResultadoSolicitacao.ELEGIVEL) {
+            assert analiseRequest != null;
+            analiseRequest.setIdProposta(proposta.getId());
+            createCardController.criarCartao(analiseRequest);
+        }
     }
 }

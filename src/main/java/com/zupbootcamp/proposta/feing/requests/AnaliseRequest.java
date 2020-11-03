@@ -24,4 +24,8 @@ public class AnaliseRequest {
     public String getIdProposta() {
         return idProposta;
     }
+
+    public void setIdProposta(String idProposta) {
+        this.idProposta = idProposta;
+    }
 }
