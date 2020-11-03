@@ -7,6 +7,8 @@ import com.zupbootcamp.proposta.feing.responses.ResultadoSolicitacao;
 import com.zupbootcamp.proposta.models.Proposta;
 import com.zupbootcamp.proposta.repositories.PropostaRepository;
 import com.zupbootcamp.proposta.requests.PropostaRequest;
+import com.zupbootcamp.proposta.services.PropostaService;
+import com.zupbootcamp.proposta.shared.VerificarDocumento;
 import feign.FeignException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,32 +25,22 @@ import java.util.Optional;
 @RequestMapping("/api/v1/propostas")
 public class CreatePropostaController {
 
-    private final PropostaRepository propostaRepository;
-    private final AnaliseClient analiseClient;
+    private final PropostaService propostaService;
+    private final VerificarDocumento verificarDocumento;
 
     @Autowired
-    public CreatePropostaController (PropostaRepository propostaRepository, AnaliseClient analiseClient) {
-        this.propostaRepository = propostaRepository;
-        this.analiseClient = analiseClient;
+    public CreatePropostaController (PropostaService propostaService, VerificarDocumento verificarDocumento) {
+        this.propostaService = propostaService;
+        this.verificarDocumento = verificarDocumento;
     }
 
     @PostMapping
     @Transactional
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<String> createProposta (@Valid @RequestBody PropostaRequest req, UriComponentsBuilder builder) {
+        verificarDocumento.verificarTamanhoCoexistencia(req);
         Proposta proposta = req.toModel();
-        Optional<Proposta> propostaOptional = propostaRepository.findbyDocument(req.getDocumento());
-        if (propostaOptional.isPresent()) {
-            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Documento já cadastrado");
-        }
-        try {
-            AnaliseRequest analiseRequest = new AnaliseRequest(proposta.getDocumento(), proposta.getNome(), proposta.getId());
-            analiseClient.analiseProposta(analiseRequest);
-            proposta.setResultadoSolicitacao(ResultadoSolicitacao.ELEGIVEL);
-        } catch (FeignException e) {
-            proposta.setResultadoSolicitacao(ResultadoSolicitacao.NAO_ELEGIVEL);
-        }
-        propostaRepository.save(proposta);
+        propostaService.criarProposta(proposta);
         return ResponseEntity.created(builder.path("/api/v1/propostas/{id}").buildAndExpand(proposta.getId()).toUri()).build();
     }
 }

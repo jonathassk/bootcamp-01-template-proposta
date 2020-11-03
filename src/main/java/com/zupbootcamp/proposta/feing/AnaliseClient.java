@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 @FeignClient(value = "Analise", url = "http://localhost:9999/api")
 public interface AnaliseClient {
-    @RequestMapping(method = RequestMethod.POST ,value = "/solicitacao/")
+    @PostMapping(value = "/solicitacao/")
     AnaliseResponse analiseProposta(@RequestBody AnaliseRequest form);
 
 }

@@ -10,17 +10,17 @@ import java.math.BigDecimal;
 
 public class PropostaRequest {
     @NotBlank
-    private String documento;
+    private final String documento;
     @Email
     @NotBlank
-    private String email;
+    private final String email;
     @NotBlank
-    private String nome;
+    private final String nome;
     @NotBlank
-    private String endereco;
+    private final String endereco;
     @NotNull
     @Positive
-    private BigDecimal salario;
+    private final BigDecimal salario;
 
     public PropostaRequest(@NotBlank String documento, @Email @NotBlank String email, @NotBlank String nome, @NotBlank String endereco, @NotNull @Positive BigDecimal salario) {
         this.documento = documento;
