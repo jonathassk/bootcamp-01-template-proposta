@@ -1,6 +1,7 @@
 package com.zupbootcamp.proposta.models;
 
 import com.zupbootcamp.proposta.feing.responses.ResultadoSolicitacao;
+import com.zupbootcamp.proposta.responses.PropostaResponse;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -66,5 +67,21 @@ public class Proposta {
 
     public void setCartaoId(String cartaoId) {
         this.cartaoId = cartaoId;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public BigDecimal getSalario() {
+        return salario;
+    }
+
+    public String getCartaoId() {
+        return cartaoId;
+    }
+
+    public String getEndereco() {
+        return endereco;
     }
 }

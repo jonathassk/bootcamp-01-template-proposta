@@ -37,8 +37,9 @@ public class CreateCardController {
         propostaRepository.save(proposta);
     }
 
-    @Scheduled(fixedDelay = 1000)
+    @Scheduled(fixedRate = 100000)
     public Optional<CartaoResponse> consultaExterna (AnaliseRequest dados) {
         return cartaoCriar.analiseProposta(dados.getIdProposta());
+
     }
 }
