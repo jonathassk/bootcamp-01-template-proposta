@@ -9,8 +9,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.util.Optional;
+
 @FeignClient(value = "cartao", url = "http://localhost:8888/api")
 public interface CartaoCriar {
     @RequestMapping(method = RequestMethod.GET ,value = "/cartoes?idProposta={idProposta}")
-    CartaoResponse analiseProposta(@PathVariable("idProposta") String idProposta);
+    Optional<CartaoResponse> analiseProposta(@PathVariable("idProposta") String idProposta);
 }

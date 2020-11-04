@@ -29,6 +29,7 @@ public class Proposta {
     @NotNull
     @Positive
     private BigDecimal salario;
+    private String cartaoId;
     private ResultadoSolicitacao resultadoSolicitacao;
 
     public Proposta(String documento, @Email @NotBlank String email, @NotBlank String nome, @NotBlank String endereco, @NotNull @Positive BigDecimal salario) {
@@ -61,5 +62,9 @@ public class Proposta {
 
     public ResultadoSolicitacao getResultadoSolicitacao() {
         return resultadoSolicitacao;
+    }
+
+    public void setCartaoId(String cartaoId) {
+        this.cartaoId = cartaoId;
     }
 }

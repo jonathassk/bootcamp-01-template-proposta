@@ -37,7 +37,7 @@ public class PropostaService {
         if (proposta.getResultadoSolicitacao() == ResultadoSolicitacao.ELEGIVEL) {
             assert analiseRequest != null;
             analiseRequest.setIdProposta(proposta.getId());
-            createCardController.criarCartao(analiseRequest);
+            createCardController.criarCartao(analiseRequest, proposta);
         }
     }
 }
