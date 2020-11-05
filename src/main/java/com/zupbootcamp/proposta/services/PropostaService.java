@@ -34,9 +34,5 @@ public class PropostaService {
             proposta.setResultadoSolicitacao(ResultadoSolicitacao.NAO_ELEGIVEL);
         }
         propostaRepository.save(proposta);
-//        if (proposta.getResultadoSolicitacao() == ResultadoSolicitacao.ELEGIVEL) {
-//            analiseRequest.setIdProposta(proposta.getId());
-//            createCardController.criarCartao(analiseRequest, proposta);
-//        }
     }
 }
