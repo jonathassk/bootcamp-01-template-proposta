@@ -23,7 +23,7 @@ public class GetPropostaController {
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     @Transactional
-    public Optional<Proposta> getProposta (@PathVariable("id") String id) {
+    public Proposta getProposta (@PathVariable("id") String id) {
         return propostaRepository.findByPropostaId(id);
     }
 }

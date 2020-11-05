@@ -24,7 +24,7 @@ public class PropostaService {
     }
 
     public void criarProposta (Proposta proposta) {
-        AnaliseRequest analiseRequest = null;
+        AnaliseRequest analiseRequest = new AnaliseRequest();
         propostaRepository.save(proposta);
         try {
             analiseRequest = new AnaliseRequest(proposta.getDocumento(), proposta.getNome(), proposta.getId());
@@ -34,10 +34,9 @@ public class PropostaService {
             proposta.setResultadoSolicitacao(ResultadoSolicitacao.NAO_ELEGIVEL);
         }
         propostaRepository.save(proposta);
-        if (proposta.getResultadoSolicitacao() == ResultadoSolicitacao.ELEGIVEL) {
-            assert analiseRequest != null;
-            analiseRequest.setIdProposta(proposta.getId());
-            createCardController.criarCartao(analiseRequest, proposta);
-        }
+//        if (proposta.getResultadoSolicitacao() == ResultadoSolicitacao.ELEGIVEL) {
+//            analiseRequest.setIdProposta(proposta.getId());
+//            createCardController.criarCartao(analiseRequest, proposta);
+//        }
     }
 }

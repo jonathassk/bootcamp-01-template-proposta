@@ -4,10 +4,7 @@ import com.zupbootcamp.proposta.feing.requests.AnaliseRequest;
 import com.zupbootcamp.proposta.feing.responses.CartaoResponse;
 import feign.Param;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
@@ -15,4 +12,5 @@ import java.util.Optional;
 public interface CartaoCriar {
     @RequestMapping(method = RequestMethod.GET ,value = "/cartoes?idProposta={idProposta}")
     Optional<CartaoResponse> analiseProposta(@PathVariable("idProposta") String idProposta);
+
 }

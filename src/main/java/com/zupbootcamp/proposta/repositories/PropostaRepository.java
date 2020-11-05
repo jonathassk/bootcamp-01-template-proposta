@@ -15,5 +15,5 @@ public interface PropostaRepository extends JpaRepository<Proposta, Long> {
     @Query(value = "SELECT * FROM PROPOSTA WHERE DOCUMENTO = :documento", nativeQuery = true)
     Optional<PropostaResponse> findbyDocumento(String documento);
     @Query(value = "SELECT * FROM PROPOSTA WHERE ID = :id", nativeQuery = true)
-    Optional<Proposta> findByPropostaId(String id);
+    Proposta findByPropostaId(String id);
 }
