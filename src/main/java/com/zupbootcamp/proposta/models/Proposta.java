@@ -1,6 +1,7 @@
 package com.zupbootcamp.proposta.models;
 
 import com.zupbootcamp.proposta.feing.responses.ResultadoSolicitacao;
+import com.zupbootcamp.proposta.requests.BiometriaRequest;
 import com.zupbootcamp.proposta.responses.PropostaResponse;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -10,7 +11,11 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.math.BigDecimal;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Entity
 public class Proposta {
@@ -32,6 +37,8 @@ public class Proposta {
     private BigDecimal salario;
     private String cartaoId;
     private ResultadoSolicitacao resultadoSolicitacao;
+    private String biometria;
+
 
     public Proposta(String documento, @Email @NotBlank String email, @NotBlank String nome, @NotBlank String endereco, @NotNull @Positive BigDecimal salario) {
         this.documento = documento;
@@ -39,6 +46,7 @@ public class Proposta {
         this.nome = nome;
         this.endereco = endereco;
         this.salario = salario;
+
     }
 
     @Deprecated
@@ -83,5 +91,13 @@ public class Proposta {
 
     public String getEndereco() {
         return endereco;
+    }
+
+    public void setBiometria(String biometria) {
+        this.biometria = biometria;
+    }
+
+    public String getBiometria() {
+        return biometria;
     }
 }
