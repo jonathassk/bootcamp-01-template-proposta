@@ -12,5 +12,4 @@ import java.util.Optional;
 public interface CartaoCriar {
     @RequestMapping(method = RequestMethod.GET ,value = "/cartoes?idProposta={idProposta}")
     Optional<CartaoResponse> analiseProposta(@PathVariable("idProposta") String idProposta);
-
 }

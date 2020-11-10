@@ -12,8 +12,8 @@ import java.util.Optional;
 public interface PropostaRepository extends JpaRepository<Proposta, Long> {
     @Query(value = "SELECT * FROM PROPOSTA WHERE DOCUMENTO = :documento", nativeQuery = true)
     Optional<Proposta> findbyDocument(String documento);
-    @Query(value = "SELECT * FROM PROPOSTA WHERE DOCUMENTO = :documento", nativeQuery = true)
-    Optional<PropostaResponse> findbyDocumento(String documento);
+    @Query(value = "SELECT * FROM PROPOSTA WHERE CARTAO_ID = :cartaoId", nativeQuery = true)
+    Proposta findByCartaoId (String cartaoId);
     @Query(value = "SELECT * FROM PROPOSTA WHERE ID = :id", nativeQuery = true)
     Proposta findByPropostaId(String id);
 }
