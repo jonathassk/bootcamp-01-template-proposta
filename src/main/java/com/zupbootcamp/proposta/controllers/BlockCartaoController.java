@@ -2,6 +2,7 @@ package com.zupbootcamp.proposta.controllers;
 
 import com.zupbootcamp.proposta.feing.AcoesCartao;
 import com.zupbootcamp.proposta.feing.requests.BloqueioRequest;
+import com.zupbootcamp.proposta.feing.responses.BloqueioResponse;
 import com.zupbootcamp.proposta.models.Bloqueios;
 import com.zupbootcamp.proposta.models.Proposta;
 import com.zupbootcamp.proposta.repositories.BloqueioRepository;
@@ -34,7 +35,7 @@ public class BlockCartaoController {
     @GetMapping
     @Transactional
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<String> blockCartao (HttpServletRequest request, @PathVariable("cartaoId") String cartaoid, UriComponentsBuilder builder) {
+    public ResponseEntity<BloqueioResponse> blockCartao (HttpServletRequest request, @PathVariable("cartaoId") String cartaoid, UriComponentsBuilder builder) {
         Proposta proposta = propostaRepository.findByCartaoId(cartaoid);
         String ip = request.getRemoteAddr();
         String userAgent = request.getHeader("User-Agent");
@@ -42,10 +43,10 @@ public class BlockCartaoController {
         repository.save(bloqueio);
         try {
             BloqueioRequest bloqueioReq = new BloqueioRequest("sistemaResponsavel");
-            acoesCartao.bloqueioCartao(cartaoid, bloqueioReq);
-            return ResponseEntity.created(builder.path("/api/v1/bloqueio/{id}").buildAndExpand(bloqueio.getId()).toUri()).build();
+            BloqueioResponse response = acoesCartao.bloqueioCartao(cartaoid, bloqueioReq);
+            return ResponseEntity.created(builder.path("/api/v1/bloqueio/{id}").buildAndExpand(bloqueio.getId()).toUri()).body(response);
         } catch (FeignException e) {
-            return ResponseEntity.created(builder.path("/api/v1/bloqueio/{id}").buildAndExpand(bloqueio.getId()).toUri()).body("Falha na tentativa de bloqueio");
+            return ResponseEntity.status(500).body(new BloqueioResponse("Falha"));
         }
 
 
