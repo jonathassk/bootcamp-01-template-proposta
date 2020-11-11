@@ -14,5 +14,5 @@ import java.util.Optional;
 @FeignClient(value = "funcoesCartao", url = "http://localhost:8888/api/cartoes")
 public interface AcoesCartao {
     @RequestMapping(method = RequestMethod.POST ,value = "/{id}/bloqueios")
-    BloqueioResponse bloqueioCartao(@PathVariable("id") String idCartao, @RequestBody BloqueioRequest bloqueioRequest);
+    Object bloqueioCartao(@PathVariable("id") String idCartao, @RequestBody BloqueioRequest bloqueioRequest);
 }

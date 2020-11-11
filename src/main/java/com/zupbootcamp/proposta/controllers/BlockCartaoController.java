@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
@@ -35,21 +36,24 @@ public class BlockCartaoController {
     @GetMapping
     @Transactional
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<BloqueioResponse> blockCartao (HttpServletRequest request, @PathVariable("cartaoId") String cartaoid, UriComponentsBuilder builder) {
+    public ResponseEntity<?> blockCartao (HttpServletRequest request, @PathVariable("cartaoId") String cartaoid, UriComponentsBuilder builder) {
         Proposta proposta = propostaRepository.findByCartaoId(cartaoid);
+        if (proposta == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "cartão não encontrado");
+        }
         String ip = request.getRemoteAddr();
         String userAgent = request.getHeader("User-Agent");
         Bloqueios bloqueio = new Bloqueios(LocalDateTime.now(), ip, userAgent);
         repository.save(bloqueio);
+        Object response = new Object();
         try {
             BloqueioRequest bloqueioReq = new BloqueioRequest("sistemaResponsavel");
-            BloqueioResponse response = acoesCartao.bloqueioCartao(cartaoid, bloqueioReq);
+            response = acoesCartao.bloqueioCartao(cartaoid, bloqueioReq);
             return ResponseEntity.created(builder.path("/api/v1/bloqueio/{id}").buildAndExpand(bloqueio.getId()).toUri()).body(response);
         } catch (FeignException e) {
-            return ResponseEntity.status(500).body(new BloqueioResponse("Falha"));
+            response = new BloqueioResponse("FALHA");
+            return ResponseEntity.status(404).body(response);
         }
-
-
     }
 
 }
