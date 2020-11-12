@@ -7,6 +7,7 @@ import com.zupbootcamp.proposta.models.Bloqueios;
 import com.zupbootcamp.proposta.models.Proposta;
 import com.zupbootcamp.proposta.repositories.BloqueioRepository;
 import com.zupbootcamp.proposta.repositories.PropostaRepository;
+import com.zupbootcamp.proposta.services.BloqueioCartao;
 import feign.FeignException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,15 +23,13 @@ import java.time.LocalDateTime;
 @RestController
 @RequestMapping("/api/v1/{cartaoId}/block")
 public class BlockCartaoController {
-    private final BloqueioRepository repository;
     private final PropostaRepository propostaRepository;
-    private final AcoesCartao acoesCartao;
+    private final BloqueioCartao bloqueioService;
 
     @Autowired
-    public BlockCartaoController (BloqueioRepository repository, PropostaRepository propostaRepository, AcoesCartao acoesCartao) {
-        this.repository = repository;
+    public BlockCartaoController (PropostaRepository propostaRepository, BloqueioCartao bloqueioService) {
         this.propostaRepository = propostaRepository;
-        this.acoesCartao = acoesCartao;
+        this.bloqueioService = bloqueioService;
     }
 
     @GetMapping
@@ -44,16 +43,7 @@ public class BlockCartaoController {
         String ip = request.getRemoteAddr();
         String userAgent = request.getHeader("User-Agent");
         Bloqueios bloqueio = new Bloqueios(LocalDateTime.now(), ip, userAgent);
-        repository.save(bloqueio);
-        Object response = new Object();
-        try {
-            BloqueioRequest bloqueioReq = new BloqueioRequest("sistemaResponsavel");
-            response = acoesCartao.bloqueioCartao(cartaoid, bloqueioReq);
-            return ResponseEntity.created(builder.path("/api/v1/bloqueio/{id}").buildAndExpand(bloqueio.getId()).toUri()).body(response);
-        } catch (FeignException e) {
-            response = new BloqueioResponse("FALHA");
-            return ResponseEntity.status(404).body(response);
-        }
+        return bloqueioService.bloqueio(cartaoid, bloqueio, builder);
     }
 
 }
