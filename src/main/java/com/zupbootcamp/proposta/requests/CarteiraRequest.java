@@ -2,11 +2,15 @@ package com.zupbootcamp.proposta.requests;
 
 import com.zupbootcamp.proposta.models.Carteira;
 
+import javax.validation.constraints.NotBlank;
+
 public class CarteiraRequest {
+    @NotBlank
     private final String email;
+    @NotBlank
     private final String carteira;
 
-    public CarteiraRequest(String email, String carteira) {
+    public CarteiraRequest(@NotBlank String email, @NotBlank String carteira) {
         this.email = email;
         this.carteira = carteira;
     }
