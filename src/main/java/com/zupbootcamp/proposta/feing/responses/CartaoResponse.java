@@ -10,12 +10,12 @@ public class CartaoResponse {
     private String idProposta;
     private List<Bloqueios> bloqueios = new ArrayList<>();
     private List<Avisos> avisos = new ArrayList<>();
-    private List<Carteiras> carteiras = new ArrayList<>();
+    private Set<Carteiras> carteiras = new HashSet<>();
     private List<Renegociacoes> parcelas = new ArrayList<>();
     private List<Parcelas> renegociacoes = new ArrayList<>();
     private List<Vencimentos> vencimentos = new ArrayList<>();
 
-    public CartaoResponse(String id, LocalDateTime emitidoEm, String titular, String idProposta, List<Bloqueios> bloqueios, List<Avisos> avisos, List<Carteiras> carteiras, List<Renegociacoes> parcelas, List<Parcelas> renegociacoes, List<Vencimentos> vencimentos) {
+    public CartaoResponse(String id, LocalDateTime emitidoEm, String titular, String idProposta, List<Bloqueios> bloqueios, List<Avisos> avisos, Set<Carteiras> carteiras, List<Renegociacoes> parcelas, List<Parcelas> renegociacoes, List<Vencimentos> vencimentos) {
         this.id = id;
         this.emitidoEm = emitidoEm;
         this.titular = titular;
@@ -54,7 +54,7 @@ public class CartaoResponse {
         return avisos;
     }
 
-    public List<Carteiras> getCarteiras() {
+    public Set<Carteiras> getCarteiras() {
         return carteiras;
     }
 

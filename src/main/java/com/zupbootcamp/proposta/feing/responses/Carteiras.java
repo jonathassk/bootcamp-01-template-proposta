@@ -1,6 +1,7 @@
 package com.zupbootcamp.proposta.feing.responses;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class Carteiras {
     private String id;
@@ -30,4 +31,5 @@ public class Carteiras {
     public String getEmissor() {
         return emissor;
     }
+
 }
