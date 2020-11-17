@@ -10,6 +10,8 @@ import com.zupbootcamp.proposta.requests.PropostaRequest;
 import com.zupbootcamp.proposta.services.PropostaService;
 import com.zupbootcamp.proposta.shared.VerificarDocumento;
 import feign.FeignException;
+import io.opentracing.Span;
+import io.opentracing.Tracer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,17 +29,21 @@ public class CreatePropostaController {
 
     private final PropostaService propostaService;
     private final VerificarDocumento verificarDocumento;
+    private final Tracer tracer;
 
     @Autowired
-    public CreatePropostaController (PropostaService propostaService, VerificarDocumento verificarDocumento) {
+    public CreatePropostaController (PropostaService propostaService, VerificarDocumento verificarDocumento, Tracer tracer) {
         this.propostaService = propostaService;
         this.verificarDocumento = verificarDocumento;
+        this.tracer = tracer;
     }
 
     @PostMapping
     @Transactional
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<String> createProposta (@Valid @RequestBody PropostaRequest req, UriComponentsBuilder builder) {
+        Span activeSpan = tracer.activeSpan();
+        activeSpan.log("log teste");
         verificarDocumento.verificarTamanhoCoexistencia(req);
         Proposta proposta = req.toModel();
         propostaService.criarProposta(proposta);
